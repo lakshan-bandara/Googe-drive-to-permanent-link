@@ -1,80 +1,116 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Google Drive Direct MP4 Link Generator</title>
         <style>
-          body{
-              background-color: black;
-              font-family: sans-serif;
+          body {
+              background-color: #0f0f0f;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              color: white;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
           }
-          input[type=text], select {
-              width: 50%;
-              padding: 12px 20px;
-              margin: 8px 0;
-              display: inline-block;
-              border: 1px solid #A1A1A1;
-              border-radius: 4px;
+          .container {
+              text-align: center;
+              width: 80%;
+              max-width: 600px;
+              padding: 40px;
+              background: #1a1a1a;
+              border-radius: 15px;
+              box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+          }
+          input[type=text] {
+              width: 100%;
+              padding: 15px;
+              margin: 20px 0;
+              border: 1px solid #333;
+              border-radius: 8px;
+              background: #252525;
+              color: white;
+              font-size: 16px;
               box-sizing: border-box;
           }
-          h1{
-              color: white;
-              font-family: sans-serif;
-              font-size: 350%;
-          }
-          h3{
-              color: white;
-              font-family: sans-serif;
+          h1 {
+              font-size: 2.5rem;
+              margin-bottom: 10px;
+              color: #00CDFF;
           }
           .button {
-            background-color: #00CDFF;
-            border: none;
-            color: white;
-            font-family: sans-serif;
-            padding: 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            border-radius: 200px;
-            cursor: pointer;
+              background-color: #00CDFF;
+              border: none;
+              color: black;
+              padding: 15px 30px;
+              font-weight: bold;
+              font-size: 16px;
+              border-radius: 50px;
+              cursor: pointer;
+              transition: 0.3s;
+              text-decoration: none;
+              display: inline-block;
           }
-          div.a{
-              text-align: center;
-            font-family: sans-serif;
-              
+          .button:hover {
+              background-color: #008fb3;
+              transform: scale(1.05);
+          }
+          .result-box {
+              margin-top: 30px;
+              padding: 15px;
+              background: #252525;
+              border-radius: 8px;
+              word-break: break-all;
+              display: none; /* පස්සේ පෙන්වන්න */
+          }
+          #finalLink {
+              color: #00FF7F;
+              font-family: monospace;
+          }
+          .footer {
+              margin-top: 40px;
+              font-size: 12px;
+              color: #666;
           }
         </style>
     </head>
     <body>
-        <div class="a">
-             <h1>Google Drive Direct Link Generator</h1>
-             <input type="text" id="glink" placeholder="https://drive.google.com/file/d/1BMNWqro86SogIOFaasA8Zk0J7c5u2jQJ/view?usp=sharing">
-                 <br>
-                 <br>
-             <a onclick="myFunction()" class="button">Generate Direct Link</a>
-             <h3 id="link"></h3>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <br>
-             <h3>* This Is My First Project So Expect Some Bugs</h3>
-             <h3>If You Want Source Code Of This Project It Will Be Available On My <a href="https://github.com/PixelPlayzXD/Google-Drive-Direct-Link-Generator">GitHub</a>.</h3>
+        <div class="container">
+             <h1>GDrive MP4 Link</h1>
+             <p>පහතින් Google Drive Share Link එක ඇතුළත් කරන්න</p>
+             
+             <input type="text" id="glink" placeholder="https://drive.google.com/file/d/XXXXX/view">
+             
+             <button onclick="generateLink()" class="button">Generate MP4 Link</button>
+
+             <div id="resultArea" class="result-box">
+                 <p style="margin:0 0 10px 0; font-size: 14px;">ඔයාගේ Direct Link එක:</p>
+                 <span id="finalLink"></span>
+             </div>
+
+             <div class="footer">
+                 <p>* මතක ඇතුව වීඩියෝ එක "Anyone with the link" ලෙස Public කරන්න.</p>
+             </div>
         </div>
+
         <script>
-            function myFunction(){
-                var glink = document.getElementById("glink").value;
-                var index = glink.indexOf("d" , glink.indexOf("d")+1);
-                var id = glink.substring(index + 2, index + 35);
-                var link = ("https://drive.usercontent.google.com/download?id=".concat(id)).concat("&export=download&authuser=0&confirm=t");
-                document.getElementById("link").innerHTML = link;
+            function generateLink() {
+                var input = document.getElementById("glink").value;
+                
+                // Regular Expression එකක් පාවිච්චි කරලා ID එක විතරක් ගන්නවා (මේක වඩාත් නිවැරදියි)
+                var matches = input.match(/\/d\/(.+?)\/(view|edit|copy)/) || input.match(/id=(.+?)(&|$)/);
+                
+                if (matches && (matches[1])) {
+                    var id = matches[1];
+                    
+                    // MP4 විදියට ප්ලේ කරන්න පුළුවන් ලේසිම ලින්ක් එක
+                    var directLink = "https://drive.google.com/uc?export=download&id=" + id;
+                    
+                    document.getElementById("finalLink").innerHTML = directLink;
+                    document.getElementById("resultArea").style.display = "block";
+                } else {
+                    alert("කරුණාකර නිවැරදි Google Drive ලින්ක් එකක් ලබා දෙන්න.");
+                }
             }
         </script>
     </body>
